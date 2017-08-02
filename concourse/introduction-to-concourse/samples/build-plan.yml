@@ -1,0 +1,33 @@
+---
+# List of resources
+resources:
+# A git resource - clone the repository
+- name: my-app
+  type: git
+  source:
+    uri: git@github.com:myorg/myapp.git
+    branch: master
+
+# List of jobs
+jobs:
+- name: build
+  plan:
+  # Trigger this resource automatically
+  - get: my-app
+    trigger: true
+  # Task definition
+  - task: test
+    config:
+      # Platform of the worker
+      platform: linux
+      # Which image should be used on the worker
+      image_resource:
+        type: docker-image
+        source:
+          repository: ubuntu
+      # Input resources
+      inputs:
+      - name: my-app
+      # Script execution
+      run:
+        path: my-app/script/runAcceptanceTests.sh

@@ -1,0 +1,17 @@
+---
+# Platform of the worker
+platform: linux
+
+# Which image should be used on the worker
+image_resource:
+  type: docker-image
+  source:
+    repository: ubuntu
+
+# Input resources
+inputs:
+- name: my-app
+
+# Script execution
+run:
+  path: my-app/script/runAcceptanceTests.sh

@@ -1,0 +1,46 @@
+---
+resources:
+- name: my-app
+  type: git
+  source:
+    uri: https://github.com/marcingrzejszczak/simple-maven-boot.git
+    branch: ((branch))
+
+jobs:
+- name: compile
+  plan:
+  - get: my-app
+    trigger: true
+  - task: compile
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source:
+          repository: frolvlad/alpine-oraclejdk8
+          tag: slim
+      inputs:
+      - name: my-app
+      run:
+        dir: my-app
+        path: ./mvnw
+        args: ["clean", "compile"]
+- name: verify
+  plan:
+  - get: my-app
+    passed: ["compile"]
+    trigger: true
+  - task: deploy
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source:
+          repository: frolvlad/alpine-oraclejdk8
+          tag: slim
+      inputs:
+      - name: my-app
+      run:
+        dir: my-app
+        path: ./mvnw
+        args: ["clean", "install"]
