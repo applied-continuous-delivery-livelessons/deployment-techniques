@@ -1,0 +1,28 @@
+---
+resources:
+- name: app
+  type: git
+  source:
+    uri: https://github.com/applied-continuous-delivery-livelessons/simple-maven-boot.git
+    branch: master
+
+jobs:
+- name: build
+  plan:
+  - get: app
+    trigger: true
+  - task: compile
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source:
+          repository: frolvlad/alpine-oraclejdk8
+          tag: slim
+      inputs:
+      - name: app
+      run:
+        dir: app
+        path: ./build.sh
+      caches:
+      - path: maven

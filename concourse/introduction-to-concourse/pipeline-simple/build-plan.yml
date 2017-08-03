@@ -1,15 +1,15 @@
 ---
 resources:
-- name: my-app
+- name: app
   type: git
   source:
-    uri: https://github.com/marcingrzejszczak/simple-maven-boot.git
+    uri: https://github.com/applied-continuous-delivery-livelessons/simple-maven-boot.git
     branch: ((branch))
 
 jobs:
-- name: compile
+- name: build
   plan:
-  - get: my-app
+  - get: app
     trigger: true
   - task: compile
     config:
@@ -20,17 +20,18 @@ jobs:
           repository: frolvlad/alpine-oraclejdk8
           tag: slim
       inputs:
-      - name: my-app
+      - name: app
       run:
-        dir: my-app
-        path: ./mvnw
-        args: ["clean", "compile"]
-- name: verify
+        dir: app
+        path: ./build.sh
+      caches:
+      - path: maven
+- name: deploy
   plan:
-  - get: my-app
-    passed: ["compile"]
+  - get: app
+    passed: ["build"]
     trigger: true
-  - task: deploy
+  - task: use-new-file
     config:
       platform: linux
       image_resource:
@@ -38,9 +39,6 @@ jobs:
         source:
           repository: frolvlad/alpine-oraclejdk8
           tag: slim
-      inputs:
-      - name: my-app
       run:
-        dir: my-app
-        path: ./mvnw
-        args: ["clean", "install"]
+        path: echo
+        args: ["Doing sth with an uploaded artifact"]
