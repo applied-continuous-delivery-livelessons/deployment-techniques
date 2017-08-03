@@ -5,6 +5,7 @@ DslFactory factory = this
 factory.job('seed-job') {
     triggers { githubPush() }
     scm { github("applied-continuous-delivery-livelessons/continuous-integration") }
+    wrappers { colorizeOutput() }
     steps {
         shell("./mvnw clean install")
         dsl {

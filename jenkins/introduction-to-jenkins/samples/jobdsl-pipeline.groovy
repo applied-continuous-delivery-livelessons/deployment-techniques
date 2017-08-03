@@ -12,6 +12,8 @@ factory.job("simple-maven-boot-build") {
     triggers { githubPush() }
     // SCM configuration
     scm { github("applied-continuous-delivery-livelessons/simple-maven-boot") }
+    // Additional wrappers
+    wrappers { colorizeOutput() }
     // Steps to be executed
     steps { shell("./mvnw clean install") }
     // What should happen after completion of steps
