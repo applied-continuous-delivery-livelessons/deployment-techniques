@@ -8,7 +8,7 @@ import jenkins.model.*
 import hudson.plugins.groovy.*
 import net.sf.json.JSONObject
 
-File jobScript = new File('/usr/share/jenkins/jobdsl-pipeline.groovy')
+File jobScript = new File('/usr/share/jenkins/seed.groovy')
 JobManagement jobManagement = new JenkinsJobManagement(System.out, [:], new File('.'))
 
 println "Creating the seed job"

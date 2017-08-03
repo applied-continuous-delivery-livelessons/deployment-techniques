@@ -15,7 +15,7 @@ public class JobScriptsTest {
 		MemoryJobManagement jm = new MemoryJobManagement();
 		DslScriptLoader loader = new DslScriptLoader(jm);
 		String scriptText = new String(Files.readAllBytes(
-				new File("course/job-dsl.groovy").toPath()));
+				new File("samples/job-dsl.groovy").toPath()));
 
 		loader.runScript(scriptText);
 	}

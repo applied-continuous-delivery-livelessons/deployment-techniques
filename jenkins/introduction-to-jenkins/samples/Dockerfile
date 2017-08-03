@@ -21,4 +21,4 @@ RUN /usr/local/bin/install-plugins.sh < /usr/share/jenkins/ref/plugins.txt
 
 # Automatic job setup
 COPY init.groovy /usr/share/jenkins/ref/init.groovy
-COPY jobdsl-pipeline.groovy /usr/share/jenkins/jobdsl-pipeline.groovy
+COPY seed.groovy /usr/share/jenkins/seed.groovy
