@@ -11,31 +11,29 @@ factory.job("simple-maven-boot-build") {
     // Trigger when a push to github was made
     triggers { githubPush() }
     // SCM configuration
-    scm { github("marcingrzejszczak/simple-maven-boot") }
-    // Steps to be executed
-    steps { shell("./mvnw clean compile") }
-    // What should happen after completion of steps
-    publishers {
-        // automatic step
-        // for manual use buildPipelineTrigger
-        downstreamParameterized {
-            trigger("simple-maven-boot-install") { triggerWithNoParameters() }
-        }
-    }
-}
-
-factory.job("simple-maven-boot-install") {
-    // Required by the Delivery Pipeline view
-    deliveryPipelineConfiguration("Install")
-    // SCM configuration
-    scm { github("marcingrzejszczak/simple-maven-boot") }
+    scm { github("applied-continuous-delivery-livelessons/simple-maven-boot") }
     // Steps to be executed
     steps { shell("./mvnw clean install") }
     // What should happen after completion of steps
     publishers {
+        // let's check out tests
         archiveJunit("**/target/surefire-reports/TEST-*.xml")
         archiveArtifacts('target/*.jar')
+        // automatic step
+        // for manual use buildPipelineTrigger
+        downstreamParameterized {
+            trigger("simple-maven-boot-deploy") { triggerWithNoParameters() }
+        }
     }
+}
+
+factory.job("simple-maven-boot-deploy") {
+    // Required by the Delivery Pipeline view
+    deliveryPipelineConfiguration("Deploy")
+    // SCM configuration
+    scm { github("applied-continuous-delivery-livelessons/simple-maven-boot") }
+    // Steps to be executed
+    steps { shell("echo 'Deploying artifact'") }
 }
 
 factory.deliveryPipelineView("simple-maven-boot-pipeline") {
