@@ -9,7 +9,7 @@ factory.job('seed-job') {
     steps {
         shell("./mvnw clean install")
         dsl {
-            external('jenkins/introduction-to-jenkins/samples/jobdsl-pipeline.groovy')
+            external('jenkins/introduction-to-jenkins/samples/jobdsl_pipeline.groovy')
             removeAction('DISABLE')
             removeViewAction('DELETE')
             ignoreExisting(false)
